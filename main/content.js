@@ -1,7 +1,3 @@
-/**
- * Content script for Apple Music Discord Rich Presence
- * Based on your working original code, adapted for background script communication
- */
 
 (() => {
   console.log('[Content] Apple Music RPC Content Script loaded');
@@ -16,9 +12,6 @@
   let lastSentData = null;
   let serverAvailable = false;
 
-  /**
-   * Get song info using the EXACT same logic as your working old code
-   */
   function getSongInfo() {
     let isPlaying = false;
     let title = null;
@@ -28,14 +21,14 @@
 
     console.log('[Content] Getting song info...');
 
-    // Try Media Session API first (same as your old code)
+    // Try Media Session API first 
     if (navigator.mediaSession && navigator.mediaSession.metadata) {
       const metadata = navigator.mediaSession.metadata;
       title = metadata.title || null;
       artist = metadata.artist || null;
       console.log('[Content] Media Session API found:', { title, artist });
 
-      // Check if any audio/video element is playing (same as your old code)
+      // Check if any audio/video element is playing 
       const mediaElements = [...document.querySelectorAll('audio, video')];
       const playingMedia = mediaElements.find(
         (media) => !media.paused && media.readyState > 2
@@ -48,11 +41,11 @@
       }
     }
 
-    // Fallback: Use DOM queries (EXACT same as your old code)
+    // Fallback: Use DOM queries 
     if (!title || !artist) {
       console.log('[Content] Trying DOM fallback - looking for .lcd-meta-line__fragment');
       
-      // This is the KEY selector from your working code
+      //key selector
       const fragments = document.querySelectorAll('.lcd-meta-line__fragment');
       console.log('[Content] Found', fragments.length, 'fragments');
       
@@ -67,7 +60,7 @@
       }
     }
 
-    // Fallback for playback state (same as your old code)
+    // Fallback for playback state 
     if (!isPlaying) {
       console.log('[Content] Checking audio elements for playback state...');
       const audios = document.querySelectorAll('audio');
@@ -139,7 +132,7 @@
   }
 
   /**
-   * Main update function (same logic as your old code)
+   * Main update function 
    */
   async function updateLoop() {
     // Check server if not available
@@ -153,7 +146,7 @@
 
     const songInfo = getSongInfo();
 
-    // Only send if song is playing (same as your old code condition)
+    // Only send if song is playing 
     if (songInfo.isPlaying) {
       console.log('[Content] Song is playing, sending update');
       await sendSongInfo(songInfo);
@@ -162,14 +155,14 @@
     }
   }
 
-  // Initialize (same as your old code)
+  // Initialize
   async function init() {
     console.log('[Content] Initializing...');
     
     // Initial server check
     await checkServer();
     
-    // Start periodic updates (same interval as your old code)
+    // Start periodic updates 
     setInterval(updateLoop, UPDATE_INTERVAL);
     
     console.log('[Content] Initialization complete - checking every', UPDATE_INTERVAL, 'ms');
