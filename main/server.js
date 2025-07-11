@@ -4,7 +4,7 @@ const { Client } = require('discord-rpc');
 
 const app = express();
 const port = 3000;
-const clientId = '1373525022819225601'; // Replace with your Discord application ID
+const clientId = '1373525022819225601'; // Discord application ID
 
 let rpc = null;
 let isRpcConnected = false;
@@ -79,22 +79,22 @@ async function initializeRPC() {
     rpc.on('ready', () => {
       isRpcConnected = true;
       connectionAttempts = 0;
-      console.log('✅ Discord RPC connected successfully!');
-      console.log('👤 User:', rpc.user?.username || 'Unknown');
-      console.log('🆔 Application ID:', rpc.application?.id || clientId);
+      console.log('Discord RPC connected successfully!');
+      console.log(' User:', rpc.user?.username || 'Unknown');
+      console.log(' Application ID:', rpc.application?.id || clientId);
     });
 
     rpc.on('error', (error) => {
-      console.error('❌ Discord RPC error:', error.message);
+      console.error(' Discord RPC error:', error.message);
       isRpcConnected = false;
       
       if (error.message.includes('ENOENT')) {
-        console.error('💡 Make sure Discord is running and logged in');
+        console.error(' Make sure Discord is running and logged in');
       }
     });
 
     rpc.on('disconnected', () => {
-      console.log('⚠️  Discord RPC disconnected');
+      console.log('Discord RPC disconnected');
       isRpcConnected = false;
       
       // Auto-reconnect after disconnection
@@ -112,23 +112,23 @@ async function initializeRPC() {
     isRpcConnected = false;
     connectionAttempts++;
     
-    console.error(`❌ Failed to connect to Discord RPC (attempt ${connectionAttempts}):`, error.message);
+    console.error(` Failed to connect to Discord RPC (attempt ${connectionAttempts}):`, error.message);
     
     if (error.message.includes('ENOENT')) {
-      console.error('💡 Make sure Discord is running and logged in');
+      console.error(' Make sure Discord is running and logged in');
     } else if (error.message.includes('RPC_CONNECTION_TIMEOUT')) {
-      console.error('💡 Discord connection timed out - restart Discord and try again');
+      console.error(' Discord connection timed out - restart Discord and try again');
     } else if (error.message.includes('Cannot read properties of null')) {
-      console.error('💡 Discord RPC initialization error - this is usually temporary');
+      console.error(' Discord RPC initialization error - this is usually temporary');
     }
     
     // Retry connection
     if (connectionAttempts < maxRetries) {
-      console.log(`🔄 Retrying in ${retryDelay/1000} seconds...`);
+      console.log(` Retrying in ${retryDelay/1000} seconds...`);
       setTimeout(initializeRPC, retryDelay);
     } else {
-      console.error('❌ Max connection attempts reached. Starting server without Discord RPC.');
-      console.error('💡 You can restart the server after Discord is running.');
+      console.error(' Max connection attempts reached. Starting server without Discord RPC.');
+      console.error(' You can restart the server after Discord is running.');
       startServer();
     }
   }
@@ -143,13 +143,13 @@ function startServer() {
     console.log('   GET  /ping   - Health check');
     console.log('   POST /update - Update Discord presence');
     console.log('   POST /clear  - Clear Discord presence');
-    console.log(`\n${isRpcConnected ? '✅' : '⚠️'} Discord RPC: ${isRpcConnected ? 'Connected' : 'Not Connected'}`);
-    console.log('\n✅ Ready to receive requests from browser extension\n');
+    console.log(`\n${isRpcConnected ? 'YES' : 'NO'} Discord RPC: ${isRpcConnected ? 'Connected' : 'Not Connected'}`);
+    console.log('\n Ready to receive requests from browser extension\n');
   });
 
   server.on('error', (error) => {
     if (error.code === 'EADDRINUSE') {
-      console.error(`❌ Port ${port} is already in use`);
+      console.error(` Port ${port} is already in use`);
       process.exit(1);
     } else {
       console.error('Server error:', error);
@@ -299,7 +299,7 @@ process.on('SIGINT', () => {
 });
 
 process.on('SIGTERM', () => {
-  console.log('🔄 Received SIGTERM, shutting down...');
+  console.log(' Received SIGTERM, shutting down...');
   if (rpc) {
     rpc.destroy();
   }
@@ -307,8 +307,8 @@ process.on('SIGTERM', () => {
 });
 
 // Start the application
-console.log('🎵 Apple Music Discord RPC Server Starting...');
-console.log('📋 Checking Discord connection...');
+console.log(' Apple Music Discord RPC Server Starting...');
+console.log(' Checking Discord connection...');
 
 // First start the server, then try to connect to Discord
 startServer();
