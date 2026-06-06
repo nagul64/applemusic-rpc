@@ -136,10 +136,10 @@ async function initializeRPC() {
 
 // Start the Express server
 function startServer() {
-  const server = app.listen(port, '0.0.0.0', () => {
-    console.log(`\n🚀 Server running on http://localhost:${port}`);
-    console.log('📡 CORS configured for browser extensions');
-    console.log('\n📋 Available endpoints:');
+  const server = app.listen(port, '127.0.0.1', () => {
+    console.log(`\nServer running on http://localhost:${port}`);
+    console.log('CORS configured for browser extensions');
+    console.log('\nAvailable endpoints:');
     console.log('   GET  /ping   - Health check');
     console.log('   POST /update - Update Discord presence');
     console.log('   POST /clear  - Clear Discord presence');
@@ -207,7 +207,7 @@ app.post('/update', async (req, res) => {
     }
 
     await rpc.setActivity(activity);
-    console.log('✅ Discord presence updated:', {
+    console.log(' Discord presence updated:', {
       title: activity.details,
       artist: activity.state,
       playing: isPlaying

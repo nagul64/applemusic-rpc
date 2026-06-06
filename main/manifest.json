@@ -1,23 +1,20 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Apple Music RPC",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "Apple Music Discord Rich Presence",
-  
   "permissions": [
     "activeTab",
-    "storage",
-    "http://localhost:3000/*",
-    "http://127.0.0.1:3000/*",
-    "https://music.apple.com/*",
-    "<all_urls>"
+    "storage"
   ],
-  
+  "host_permissions": [
+    "http://127.0.0.1:3000/*",
+    "http://localhost:3000/*",
+    "https://music.apple.com/*"
+  ],
   "background": {
-    "scripts": ["background.js"],
-    "persistent": false
+    "service_worker": "background.js"
   },
-  
   "content_scripts": [
     {
       "matches": ["https://music.apple.com/*"],
@@ -25,8 +22,10 @@
       "run_at": "document_end"
     }
   ],
-  
   "web_accessible_resources": [
-    "content.js"
+    {
+      "resources": ["content.js"],
+      "matches": ["https://music.apple.com/*"]
+    }
   ]
 }
